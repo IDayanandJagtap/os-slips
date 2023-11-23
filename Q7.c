@@ -1,9 +1,8 @@
 /*
-Write the simulation program to implement demand paging and show the
-page scheduling and total number of page faults according to the LFU page
-replacement algorithm. Assume the memory of n frames.
-Reference String : 3,4,5,4,3,4,7,2,4,5,6,7,2,4,6
-
+Write the simulation program for demand paging and show the page
+ scheduling and total number of page faults according the MFU page
+ replacement algorithm. Assume the memory of n frames.
+Reference String : 8, 5, 7, 8, 5, 7, 2, 3, 7, 3, 5, 9, 4, 6, 2
 */
 
 #include <stdio.h>
@@ -15,10 +14,10 @@ typedef struct
     int cameAt; // Store the index value when the page came (for FCFS when the count value is same)
 } Frame;
 
-void LFU(int refString[], int n, int frameSize)
+void MFU(int refString[], int n, int frameSize)
 {
     int pageFault = 0;
-
+    int counter = 0;
     // Initialise frames to 0
     Frame frames[frameSize];
     for (int i = 0; i < frameSize; i++)
@@ -47,29 +46,24 @@ void LFU(int refString[], int n, int frameSize)
 
         if (!isPresent)
         {
-            int minFreq = 99;
-            int victim = 99;
-            // To find the least frequency
-            for (int j = 0; j < frameSize; j++)
+            if (counter < frameSize)
             {
-                if (frames[j].count < minFreq)
-                {
-                    minFreq = frames[j].count;
-                    victim = j;
-                }
+                victim = counter;
+                counter++;
             }
-            // to find who came first if there is a tie
-            for (int j = 0; j < frameSize; j++)
+            else
             {
-                if (frames[j].count == minFreq)
+                int maxFreq = -1;
+
+                for (int j = 0; j < frameSize; j++)
                 {
-                    if (frames[j].cameAt < frames[victim].cameAt)
+                    if (frames[j].count > maxFreq)
                     {
+                        maxFreq = frames[j].count;
                         victim = j;
                     }
                 }
             }
-
             // replace
             frames[victim].no = page;
             frames[victim].count = 1;
@@ -82,8 +76,8 @@ void LFU(int refString[], int n, int frameSize)
             {
                 printf("%d\t", frames[j].no);
             }
+            printf("\n");
         }
-        printf("\n");
     }
     printf("No of page faults : %d\n", pageFault);
 }
@@ -107,5 +101,5 @@ void main()
     scanf("%d", &frameSize);
 
     // Paging
-    LFU(refString, n, frameSize);
+    MFU(refString, n, frameSize);
 }
