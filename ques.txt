@@ -94,6 +94,7 @@ Q9 : (slip 5 && slip 7 && slip 17 && slip 23)
 Reference String : 8, 5, 7, 8, 5, 7, 2, 3, 7, 3, 5, 9, 4, 6, 2 
 
 
+
 Q10 : (slip 6)
 
 Write the simulation program for demand paging and show the page
